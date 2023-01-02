@@ -23,9 +23,8 @@ use Illuminate\Support\Facades\Log;
 
 Route::post('login', [AuthController::class, 'login'])->name('login');
 Route::post('register', [AuthController::class, 'register'])->name('register');
-// Route::post('login', function(){
-//     Log::de
-// });
+Route::post('forgot-password', [AuthController::class, 'forgotPassoword']);
+
 Route::group([
     'middleware' => 'auth:api',
     'prefix' => 'auth'

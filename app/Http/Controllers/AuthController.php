@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UserRequest;
 use App\Models\User;
 use App\Models\Token;
+use App\Jobs\SendEmail;
 use Illuminate\Http\Request;
+use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SendEmailForgotPassword;
 
 class AuthController extends Controller
 {
@@ -74,6 +77,31 @@ class AuthController extends Controller
     {
         auth()->logout();
         return response()->json(['message' => 'Successfully logged out']);
+    }
+
+    public function forgotPassoword(Request $request)
+    {
+        // $details = [
+        //     'title' => 'Mail from ItSolutionStuff.com',
+        //     'body' => 'This is for testing email using smtp'
+        // ];
+        // Mail::to($request->email)->send(new SendEmailForgotPassword($details));
+        // return 'ok';
+        // 'arifingdr@gmail.com'
+        $datas = [
+            'arifingdr@gmail.com',
+            'arifin@lenna.ai',
+            'arifin27@gmail.com'
+        ];
+        try {
+            foreach ($datas as $key => $value) {
+                // SendEmail::dispatch($value)->onQueue('email')->delay(now()->addMinutes(1));
+                SendEmail::dispatch($value)->onQueue('email')->delay(10);
+            }
+            return 'successfuly send email';
+        } catch (\Throwable $e) {
+            return 'failed send email';
+        }
     }
 
     /**
